@@ -70,6 +70,25 @@ def get_contact(id):
     
     return jsonify({'contact': contact.serialize()}), 200
 
+@app.route("/contacts/<int:id>", methods=['PATCH'])
+def update_contact(id):
+    contact = Contact.query.get_or_404(id)
+    
+    if contact:
+        data = request.get_json()
+        name = data.get('name', contact.name)
+        email = data.get('email', contact.email)
+        phone = data.get('phone', contact.phone)
+        
+        contact.name = name
+        contact.email = email
+        contact.phone = phone
+        
+        db.session.commit()
+        
+        return jsonify({'message': 'contacto actualizado con éxito', 'contact': contact.serialize()}), 200
+
+
 
 if __name__ == '__main__':
     app.run(port=8000)

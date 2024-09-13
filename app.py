@@ -28,3 +28,35 @@ class Contact(db.Model):
 #create table in database
 with app.app_context():
     db.create_all()
+    
+
+#create routes
+
+@app.route("/contacts", methods=['GET'])
+def get_contacts():
+    contacts = Contact.query.all()
+    return jsonify({'contacts': [contact.serialize() for contact in contacts]})
+
+@app.route("/contacts", methods=['POST'])
+def create_contact():
+    data = request.get_json()
+    name = data['name']
+    email = data['email']
+    phone = data['phone']
+    
+    new_contact = Contact(name=name, email=email, phone=phone)
+    db.session.add(new_contact)
+    db.session.commit()
+    
+    return jsonify(
+        {
+            'message': 'contacto creado con éxito', 
+            'contact': new_contact.serialize()
+        }
+        )
+
+
+
+
+if __name__ == '__main__':
+    app.run(port=8000)

@@ -89,6 +89,18 @@ def update_contact(id):
         return jsonify({'message': 'contacto actualizado con éxito', 'contact': contact.serialize()}), 200
 
 
+@app.route("/contacts/<int:id>", methods=['DELETE'])
+def delete_contact(id):
+    contact = Contact.query.filter_by(id=id).first()
+    
+    if contact:
+        db.session.delete(contact)
+        db.session.commit()
+        return jsonify({'message': 'contacto eliminado con éxito'}), 200
+    
+    else:
+        return jsonify({'message': 'contacto no encontrado'}), 404
+
 
 if __name__ == '__main__':
     app.run(port=8000)

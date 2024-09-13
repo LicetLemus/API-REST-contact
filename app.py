@@ -45,17 +45,30 @@ def create_contact():
     phone = data['phone']
     
     new_contact = Contact(name=name, email=email, phone=phone)
-    db.session.add(new_contact)
-    db.session.commit()
     
-    return jsonify(
-        {
-            'message': 'contacto creado con éxito', 
-            'contact': new_contact.serialize()
-        }
-        )
+    existing_contact = Contact.query.filter_by(email=email).first()
+    
+    if existing_contact:
+        return jsonify({'message': 'Ya hay un contacto con este email'}), 409  # Conflict HTTP status code
+    else:
+        db.session.add(new_contact)
+        db.session.commit()
+        return jsonify(
+            {
+                'message': 'contacto creado con éxito', 
+                'contact': new_contact.serialize()
+            }
+            ), 201
 
 
+@app.route("/contacts/<int:id>", methods=['GET'])
+def get_contact(id):
+    contact = Contact.query.filter_by(id=id).first()
+    
+    if not contact:
+        return jsonify({'message': 'contacto no encontrado'}), 404
+    
+    return jsonify({'contact': contact.serialize()}), 200
 
 
 if __name__ == '__main__':

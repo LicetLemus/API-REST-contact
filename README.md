@@ -13,9 +13,9 @@ Gracias por visitarme y explorar este proyecto. Espero que encuentres útil esta
 ## Endpoints disponibles
 
 - **GET /contacts**: Obtener todos los contactos.
-- **POST /contacts**: Crear un nuevo contacto.
+- **POST /contacts**: Crear un nuevo contacto - Content-Type: application/json
 - **GET /contacts/id**: Obtener un contacto por ID.
-- **PATCH /contacts/id**: Actualizar un contacto existente.
+- **PATCH /contacts/id**: Actualizar un contacto existente- Content-Type: application/json
 - **DELETE /contacts/id**: Eliminar un contacto.
 
 ---
